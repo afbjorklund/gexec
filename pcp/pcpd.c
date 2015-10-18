@@ -704,10 +704,16 @@ static void *route_down_thr(void *arg)
     pcp_hdr         hdr;
     unsigned char   checksum[PCP_CHECKSUM_SIZE];
     int             rval;
+    uid_t           oid;
 
     /* Run all commands with user's GID/UID */
-    if (setegid(state->gid) < 0 || seteuid(state->uid) < 0)
-        goto cleanup;
+    if ((oid = geteuid()) == 0) {
+        if (setegid(state->gid) < 0 || seteuid(state->uid) < 0)
+            goto cleanup;
+    } else {
+        if (geteuid() != state->uid || getegid() != state->gid)
+            goto cleanup;
+    }
 
     for (;;) {
         if (net_recv_bytes(state->up_sock, (void *)&hdr, sizeof(pcp_hdr)) != E_OK)
@@ -742,8 +748,10 @@ static void *route_down_thr(void *arg)
         }
     }
  cleanup:   
-    e_assert(setegid(0) == 0); /* Back to root for pthread_join */
-    e_assert(seteuid(0) == 0); /* Back to root for pthread_join */
+    if (oid == 0) {
+        e_assert(setegid(0) == 0); /* Back to root for pthread_join */
+        e_assert(seteuid(0) == 0); /* Back to root for pthread_join */
+    }
     sem_post(&state->cleanup_sem);
     sem_wait(&state->killme_sem);
     return NULL;
