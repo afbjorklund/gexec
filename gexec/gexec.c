@@ -39,6 +39,7 @@ static void print_bad_nodes(int *bad_nodes, char **ips)
     bitmask_copy(bad_nodes_copy, bad_nodes, GEXEC_MAX_NPROCS);
     while ((bad_node = bitmask_ffs(bad_nodes_copy, GEXEC_MAX_NPROCS)) != -1) {
         ip = ips[bad_node];
+        strcpy(host, ip);
         net_iptohost(ip, host, 1024);
         printf("Could not connect to %s (%s)\n", host, ip);
         bitmask_clr(bad_nodes_copy, GEXEC_MAX_NPROCS, bad_node);
