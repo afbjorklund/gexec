@@ -4,6 +4,9 @@
 #if HAVE_CONFIG_H
 #include <config.h>
 #endif /* HAVE_CONFIG_H */
+#ifdef linux
+#define _GNU_SOURCE 1
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,10 +48,10 @@ static int check_credentials(struct ucred *ucred, credentials *cred)
 
 static int gen_signature(credentials *cred, signature *cred_sig)
 {
-    int     error;
-    int     sig_len;
-    RSA     *priv_key = NULL;
-    FILE    *fp = NULL;
+    int          error;
+    unsigned int sig_len;
+    RSA          *priv_key = NULL;
+    FILE         *fp = NULL;
 
     if ((fp = fopen(AUTH_PRIV_KEY, "r")) == NULL) {
         error = AUTH_FOPEN_ERROR;
@@ -79,7 +82,7 @@ static int gen_signature(credentials *cred, signature *cred_sig)
 static void *authd_thr(void *arg)
 {
     long int     sock = (long int)arg;
-    int          len = sizeof(struct ucred); 
+    socklen_t    len = sizeof(struct ucred);
     struct ucred ucred;
     credentials  cred;
     signature    cred_sig;
