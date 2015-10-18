@@ -792,12 +792,19 @@ static int child_setup_env(request *r, uid_t uid, gid_t gid)
     for (i = 0; i < r->envc; i++)
         if (putenv(r->envp[i]) < 0)
             return GEXEC_PUTENV_ERROR;
-    if (initgroups(r->user, gid) < 0)
-        return GEXEC_INITGROUPS_ERROR;
-    if (setgid(gid) < 0)
-        return GEXEC_SETGID_ERROR;
-    if (setuid(uid) < 0)
-        return GEXEC_SETUID_ERROR;
+    if (geteuid() == 0) { /* need root for initgroups etc */
+        if (initgroups(r->user, gid) < 0)
+            return GEXEC_INITGROUPS_ERROR;
+        if (setgid(gid) < 0)
+            return GEXEC_SETGID_ERROR;
+        if (setuid(uid) < 0)
+            return GEXEC_SETUID_ERROR;
+    } else { /* not root, so needs to be same user as uid */
+        if (getuid() != uid)
+            return GEXEC_SETUID_ERROR;
+        if (getgid() != gid)
+            return GEXEC_SETGID_ERROR;
+    }
     if (chdir(r->cwd) < 0) {
         fprintf(stderr, "Could not chdir to %s\n", r->cwd);
         return GEXEC_CHDIR_ERROR;
