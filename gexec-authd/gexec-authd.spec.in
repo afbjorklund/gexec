@@ -36,7 +36,7 @@ install -D -m 755 config/gexec-authd /etc/init.d/gexec-authd
 
 %post 
 if [ "$1" = 1 ]; then
-  /usr/bin/openssl genrsa -out /etc/auth_priv.pem
+  /usr/bin/openssl genrsa -out /etc/auth_priv.pem 512
   /usr/bin/openssl rsa -in /etc/auth_priv.pem -pubout -out /etc/auth_pub.pem
   /bin/chmod 600 /etc/auth_priv.pem
   /etc/init.d/gexec-authd restart

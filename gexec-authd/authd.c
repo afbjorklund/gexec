@@ -61,6 +61,7 @@ static int gen_signature(credentials *cred, signature *cred_sig)
         error = AUTH_RSA_ERROR;
         goto cleanup;
     }
+    e_assert(RSA_size(priv_key) == AUTH_RSA_SIGLEN);
     if (RSA_sign(NID_sha1, (unsigned char *)cred, sizeof(credentials), 
                  cred_sig->data, &sig_len, priv_key) == 0) {
         error = AUTH_RSA_ERROR;

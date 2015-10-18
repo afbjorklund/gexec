@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <time.h>
 
-/* Length in bytes of RSA signature */
+/* Length in bytes of RSA signature (512 bit key) */
 #define AUTH_RSA_SIGLEN 64
 
 /* Sockname Unix protocol module namespace (add PID) */
