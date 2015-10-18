@@ -388,7 +388,8 @@ static int send_pcp_write_chunk2(int *child_socks, char **child_ips,
         if (opts->verbose)
             print_tick(bytes_read, tick_size, &num_ticks);
     }
-    printf("\n"); fflush(stdout);
+    if (opts->verbose)
+        printf("\n"); fflush(stdout);
     xfree(buf);
     close(fd);
     return PCP_OK;
