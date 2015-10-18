@@ -36,6 +36,7 @@ AC_ARG_ENABLE(ganglia,
 [ if test "$enableval" = "yes" ; then
      echo "Use of Ganglia for node selection enabled"
      AC_DEFINE(GANGLIA)
+     AC_CHECK_LIB(expat, XML_ParserCreate)
      GANGLIA_LIB="$libdir/libganglia.a"
   else
      GANGLIA_LIB=""
