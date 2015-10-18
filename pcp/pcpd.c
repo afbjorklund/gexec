@@ -364,7 +364,7 @@ static int sha1(char *filename, unsigned char *digest)
         return PCP_REMOTEFILE_ERROR;
     file_len = stat_buf.st_size;
 
-    SHA_Init(&ctx);
+    SHA1_Init(&ctx);
     bytes_read = 0;
     buf = xmalloc(PCP_DEF_FRAG_SIZE);
     while ((file_len - bytes_read) != 0) {
@@ -377,10 +377,10 @@ static int sha1(char *filename, unsigned char *digest)
             close(fd);
             return PCP_IO_ERROR;            
         }
-        SHA_Update(&ctx, buf, nbytes);
+        SHA1_Update(&ctx, buf, nbytes);
         bytes_read += nbytes;
     }
-    SHA_Final(digest, &ctx);
+    SHA1_Final(digest, &ctx);
     xfree(buf);
     close(fd);
     return PCP_OK;
