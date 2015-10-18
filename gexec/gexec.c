@@ -23,6 +23,7 @@
 #include "gexec_options.h"
 #ifdef GANGLIA
 #include <ganglia.h>
+#include <ganglia_gexec.h>
 extern void err_quiet();
 #endif /* GANGLIA */
 
