@@ -50,7 +50,7 @@ dnl
 dnl
 dnl Checks for libraries.
 dnl
-AC_CHECK_LIB([auth -le -lssl], auth_init_credentials,[],[AC_MSG_ERROR(libauth not found)])
+AC_CHECK_LIB([auth -le -lssl -lcrypto], auth_init_credentials,[],[AC_MSG_ERROR(libauth not found)])
 AC_CHECK_LIB(crypto, CRYPTO_free,[],[AC_MSG_ERROR(libcrypto test failed)])
 AC_CHECK_LIB([e -lpthread], barrier_create,[],[AC_MSG_ERROR(libe not found)])
 AC_CHECK_LIB(pthread, pthread_create,[],[AC_MSG_ERROR(pthread_create failed)])

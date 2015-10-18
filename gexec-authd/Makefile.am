@@ -9,7 +9,7 @@ gexec_authd_SOURCES	= authd.c authd.h authd_options.c authd_options.h \
 				  	  auth.h
 libauth_a_SOURCES	= auth.c auth.h
 
-gexec_authd_LDADD	= -lpthread -lssl -le
+gexec_authd_LDADD	= -lpthread -lssl -lcrypto -le
 
 gexec_authd_LDFLAGS	= -L.
 
